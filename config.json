@@ -1,0 +1,7 @@
+
+[
+  {"host":"localhost"},
+  {"host":"1.1.1.1"},
+  {"host":"1.2.3.4", "user":"abc", "password":"xxx"},
+  {"host":"4.3.2.1", "user":"kkk", "key_files":["~/.ssh/id_rsa"]}
+]
