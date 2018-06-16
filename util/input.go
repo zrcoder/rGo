@@ -2,7 +2,7 @@ package util
 
 import (
 	"flag"
-	"rGo/util/security"
+	"github.com/DingHub/rGo/util/security"
 	"fmt"
 	"os"
 )
