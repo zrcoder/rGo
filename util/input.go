@@ -10,18 +10,20 @@ import (
 var Input = struct {
 	User     string
 	Password string
-	Cmd      string
+	Cmds     string
+	Sh       string
 	Duration int64
 }{}
 
 func init() {
 	const (
-		tUsage = "the expected whole duration (second, default 1),\n" +
-			"\tinfact, rGo will execute commands with mutiple threads"
+		tUsage = "the whole time expected (second, default 1),\n" +
+			"infact, rGo will execute commands with mutiple threads,\n" +
+			"and the whole time will be the max one for all the threads"
 		uUsage = "if there is no \"user\" field of some record in config.json,\n" +
-			"\tvalue of this option will be used"
+			"value of this option will be used"
 		pUsage = "if there is no \"paasword\" or \"key_files\" field of some records in config.json,\n" +
-			"\twe can use this option and then enter the paasword"
+			"we can use this option and then enter the paasword"
 	)
 	var (
 		h = false
@@ -29,7 +31,8 @@ func init() {
 		useEnteredPwd = false
 	)
 	flag.Int64Var(&Input.Duration, "t", 1, tUsage)
-	flag.StringVar(&Input.Cmd, "c", "", "command")
+	flag.StringVar(&Input.Cmds, "c", "", "commands (can be separated with \";\")")
+	flag.StringVar(&Input.Sh, "sh", "", "shell script to be executed")
 	flag.StringVar(&Input.User, "u", "", uUsage)
 	flag.BoolVar(&useEnteredPwd, "p", false, pUsage)
 	flag.BoolVar(&h, "h", false, "show help info")
@@ -49,17 +52,20 @@ func init() {
 
 const helpInfo = `Usage of rGo:
   -c string
-		command
+	commands (can be separated with ";")
+  -sh string
+	shell script to be executed
   -t int
-		the expected whole duration (second, default 1),
-		infact, rGo will execute commands with mutiple threads
+	the whole time expected (second, default 1),
+	infact, rGo will execute commands with mutiple threads,
+	and the whole time will be the max one for all the threads
 
   -u string
-		if there is no "user" field of some record in config.json,
-		value of this option will be used
+	if there is no "user" field of some record in config.json,
+	value of this option will be used
   -p
-		if there is no "paasword" or "key_files" field of some records in config.json,
-		we can use this option and then enter the paasword`
+	if there is no "paasword" or "key_files" field of some records in config.json,
+	we can use this option and then enter the paasword`
 func printHelpInfo()  {
 	fmt.Println(helpInfo)
 }
