@@ -1,6 +1,6 @@
 # rGo
-rGo means "Ready? Go!" or "remote go" ~~~<br>
-It can execute commands(or shell script) on multiple remote hosts autolly
+rGo means "Ready? Go!" or "remote go" ~<br>
+It can execute commands(or shell script) on multiple remote hosts automatically
 
 ## Usage
 
