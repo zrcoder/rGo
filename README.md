@@ -59,7 +59,8 @@ Usage of rGo:
 	shell script to be executed
   -t int
 	the expected whole duration (second, default 1),
-	infact, rGo will execute commands with mutiple threads
+	infact, rGo will execute commands with mutiple threads,
+	and the whole time will be the max one for all the threads
 
   -u string
 	if there is no "user" field of some record in config.json,
