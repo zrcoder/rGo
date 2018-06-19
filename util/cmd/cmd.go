@@ -9,7 +9,7 @@ import (
 
 // Executes the command and returns the result.
 func Run(cmd string) (string, error) {
-	command := exec.Command("/bin/sh", "-c", cmd)
+	command := exec.Command("/bin/bash", "-c", cmd)
 	var out bytes.Buffer
 	command.Stdout = &out
 	err := command.Run()
