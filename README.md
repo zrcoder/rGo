@@ -1,6 +1,6 @@
 # rGo
 rGo means "Ready? Go!" or "remote go" ~<br>
-It can execute commands(or shell script) on multiple remote hosts automatically
+It can execute commands(or a shell script) on multiple remote hosts almost at the same time
 
 ## Usage
 

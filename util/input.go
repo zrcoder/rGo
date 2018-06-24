@@ -26,7 +26,6 @@ func init() {
 			"we can use this option and then enter the paasword"
 	)
 	var (
-		h = false
 		help = false
 		useEnteredPwd = false
 	)
@@ -35,11 +34,10 @@ func init() {
 	flag.StringVar(&Input.Sh, "sh", "", "shell script to be executed")
 	flag.StringVar(&Input.User, "u", "", uUsage)
 	flag.BoolVar(&useEnteredPwd, "p", false, pUsage)
-	flag.BoolVar(&h, "h", false, "show help info")
 	flag.BoolVar(&help, "help", false, "show help info")
 	flag.Parse()
 
-	if h || help {
+	if help || (Input.Cmds == "" && Input.Sh == "") {
 		printHelpInfo()
 		os.Exit(0)
 	}
@@ -50,7 +48,13 @@ func init() {
 	}
 }
 
-const helpInfo = `Usage of rGo:
+const helpInfo = `  ---------------------------------------------------------------------------------------------
+  rGo can execute commands(or a shell script) on multiple remote hosts almost at the same time
+  We must config the hosts in the file config.json, and then, run~
+  ---------------------------------------------------------------------------------------------
+
+  Usage of rGo:
+
   -c string
 	commands (can be separated with ";")
   -sh string
@@ -62,10 +66,11 @@ const helpInfo = `Usage of rGo:
 
   -u string
 	if there is no "user" field of some record in config.json,
-	value of this option will be used
+	value of this flag will be used
   -p
 	if there is no "paasword" or "key_files" field of some records in config.json,
-	we can use this option and then enter the paasword`
+	we can use this flag and then enter the paasword
+`
 func printHelpInfo()  {
 	fmt.Println(helpInfo)
 }
