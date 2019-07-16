@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 	
-	"github.com/DingHub/rGo/util"
-	"github.com/DingHub/rGo/util/ssh"
-	"github.com/DingHub/rGo/util/cmd"
+	"github.com/zrcoder/rGo/util"
+	"github.com/zrcoder/rGo/util/ssh"
+	"github.com/zrcoder/rGo/util/cmd"
 )
 
 const lineSep = "\n"

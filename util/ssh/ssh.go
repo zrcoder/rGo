@@ -45,7 +45,7 @@ type Client struct {
 	SshClient *ssh.Client
 }
 
-func NewClient(config *Config) (client *Client, err error) {
+func NewClient(config Config) (client *Client, err error) {
 	clientConfig := &ssh.ClientConfig{
 		User: config.User,
 	}
