@@ -1,6 +1,6 @@
 package main
 
-import (	
+import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -8,16 +8,16 @@ import (
 	"os"
 	"strings"
 	"time"
-	
+
 	"github.com/zrcoder/rGo/util"
 	"github.com/zrcoder/rGo/util/ssh"
 	"github.com/zrcoder/rGo/util/cmd"
 )
 
 const lineSep = "\n"
- 
+
 var logger = log.New(os.Stdout, "", log.Lshortfile|log.LstdFlags)
- 
+
 func main() {
 	configData, err := ioutil.ReadFile("config.json")
 	if err != nil {
@@ -30,7 +30,7 @@ func main() {
 		logger.Println(err)
 		os.Exit(1)
 	}
- 
+
 	for _, config := range configs {
 		go func() {
 			if config.User == "" {
@@ -64,7 +64,7 @@ func main() {
 	}
 	time.Sleep(time.Second * time.Duration(util.Input.Duration))
 }
- 
+
 func localExec(headMsg, cmds string) {
 	result, err := cmd.Run(cmds)
 	if err != nil {
@@ -73,11 +73,11 @@ func localExec(headMsg, cmds string) {
 	}
 	logger.Printf("%s\n%s\n", headMsg, result)
 }
- 
+
 func remoteExec(sshClient *ssh.Client, headMsg, cmds string) {
 	stdout, stderr, err := sshClient.Run(cmds)
 	defer sshClient.Close()
- 
+
 	headMsg = strings.TrimRight(headMsg, lineSep) + lineSep
 	if stderr != "" {
 		headMsg += "stderr: " + stderr + lineSep
