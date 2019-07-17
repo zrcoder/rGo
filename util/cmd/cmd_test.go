@@ -15,11 +15,16 @@ func TestRun(t *testing.T) {
 		{"hhh"},
 	}
 	for _, test := range tests {
-		output, err := Run(test.cmd)
+		t.Log(test.cmd)
+		stdout, stderr, err := Run(test.cmd)
+		if stdout != "" {
+			t.Logf("stdout:\n%s\n", stdout)
+		}
+		if stderr != "" {
+			t.Logf("stderr:\n%s\n", stderr)
+		}
 		if err != nil {
-			t.Log(err)
-		} else {
-			t.Log(output)
+			t.Log("err:", err)
 		}
 	}
 }
@@ -35,17 +40,21 @@ func TestRunWithTimeout(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		inner(test.cmd, 2, t)
+		inner(test.cmd, 2*time.Nanosecond, t)
 		inner(test.cmd, 20*time.Second, t)
 	}
 }
 
 func inner(cmd string, timeout time.Duration, t *testing.T) {
 	t.Log("command:", cmd, "; timeout:", timeout)
-	err := RunWithTimeout(timeout, cmd)
+	stdout, stderr, err := RunWithTimeout(timeout, cmd)
+	if stdout != "" {
+		t.Logf("stdout:\n%s\n", stdout)
+	}
+	if stderr != "" {
+		t.Logf("stderr:\n%s\n", stderr)
+	}
 	if err != nil {
-		t.Log("error hanppens:", err)
-	} else {
-		t.Log("not timeout!")
+		t.Log("err:", err)
 	}
 }
