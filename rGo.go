@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
+	"sync"
 
 	"github.com/zrcoder/rGo/util/ssh"
 	"github.com/zrcoder/rGo/util/cmd"
@@ -30,8 +30,10 @@ func main() {
 		os.Exit(1)
 	}
 
+	wg := sync.WaitGroup{}
+	wg.Add(len(configs))
 	for _, config := range configs {
-		go func() {
+		go func(config ssh.Config) {
 			if config.User == "" {
 				config.User = Input.User
 			}
@@ -54,12 +56,13 @@ func main() {
 			} else {
 				sshClient, err := ssh.NewClient(config)
 				if err != nil {
-					logger.Printf("%s\n%s\n", headMsg, err.Error())
+					logger.Printf("%s remote exec error:%s\n", headMsg, err.Error())
 				} else {
 					remoteExec(sshClient, headMsg, cmds)
 				}
 			}
-		}()
+			wg.Done()
+		}(config)
 	}
 	time.Sleep(time.Second * time.Duration(Input.Duration))
 }
