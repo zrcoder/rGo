@@ -64,7 +64,7 @@ func main() {
 			wg.Done()
 		}(config)
 	}
-	time.Sleep(time.Second * time.Duration(Input.Duration))
+	wg.Wait()
 }
 
 func localExec(headMsg, cmds string) {
