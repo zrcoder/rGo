@@ -13,14 +13,10 @@ var Input struct {
 	Password string
 	Cmds     string
 	Sh       string
-	Duration int64
 }
 
 func init() {
 	const (
-		tUsage = "the whole time expected (second, default 1),\n" +
-			"infact, rGo will execute commands with mutiple threads,\n" +
-			"and the whole time will be the max one for all the threads"
 		uUsage = "if there is no \"user\" field of some record in config.json,\n" +
 			"value of this option will be used"
 		pUsage = "if there is no \"paasword\" or \"key_files\" field of some records in config.json,\n" +
@@ -30,7 +26,6 @@ func init() {
 		help          = false
 		useEnteredPwd = false
 	)
-	flag.Int64Var(&Input.Duration, "t", 1, tUsage)
 	flag.StringVar(&Input.Cmds, "c", "", "commands (can be separated with \";\")")
 	flag.StringVar(&Input.Sh, "sh", "", "shell script file to be executed")
 	flag.StringVar(&Input.User, "u", "", uUsage)
@@ -60,10 +55,6 @@ const helpInfo = `  ------------------------------------------------------------
 	commands (can be separated with ";")
   -sh string
 	shell script file to be executed
-  -t int
-	the whole time expected (second, default 1),
-	infact, rGo will execute commands with mutiple threads,
-	and the whole time will be the max one for all the threads
 
   -u string
 	if there is no "user" field of some record in config.json,
