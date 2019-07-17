@@ -2,18 +2,19 @@ package util
 
 import (
 	"flag"
-	"github.com/DingHub/rGo/util/security"
 	"fmt"
 	"os"
+
+	"github.com/zrcoder/rGo/util/security"
 )
 
-var Input = struct {
+var Input struct {
 	User     string
 	Password string
 	Cmds     string
 	Sh       string
 	Duration int64
-}{}
+}
 
 func init() {
 	const (
@@ -31,7 +32,7 @@ func init() {
 	)
 	flag.Int64Var(&Input.Duration, "t", 1, tUsage)
 	flag.StringVar(&Input.Cmds, "c", "", "commands (can be separated with \";\")")
-	flag.StringVar(&Input.Sh, "sh", "", "shell script to be executed")
+	flag.StringVar(&Input.Sh, "sh", "", "shell script file to be executed")
 	flag.StringVar(&Input.User, "u", "", uUsage)
 	flag.BoolVar(&useEnteredPwd, "p", false, pUsage)
 	flag.BoolVar(&help, "help", false, "show help info")
@@ -50,7 +51,7 @@ func init() {
 
 const helpInfo = `  ---------------------------------------------------------------------------------------------
   rGo can execute commands(or a shell script) on multiple remote hosts almost at the same time
-  We must config the hosts in the file config.json, and then, run~
+  We must firstly config the hosts in the file config.json, and then run rGo
   ---------------------------------------------------------------------------------------------
 
   Usage of rGo:
@@ -58,7 +59,7 @@ const helpInfo = `  ------------------------------------------------------------
   -c string
 	commands (can be separated with ";")
   -sh string
-	shell script to be executed
+	shell script file to be executed
   -t int
 	the whole time expected (second, default 1),
 	infact, rGo will execute commands with mutiple threads,
