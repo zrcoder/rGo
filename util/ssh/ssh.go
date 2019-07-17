@@ -33,12 +33,12 @@ const (
 )
 
 type Config struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
+	User     string `json:"user,omitempty"`
+	Password string `json:"password,omitempty"`
 	Host     string `json:"host"`
 	// The file names of additional key files to use for authentication (~/.ssh/id_rsa is defaulted).
 	// RSA (PKCS#1), DSA (OpenSSL), and ECDSA private keys are supported.
-	KeyFiles []string `json:"key_files"`
+	KeyFiles []string `json:"key_files,omitempty"`
 }
 
 func (c Config) String() string {
