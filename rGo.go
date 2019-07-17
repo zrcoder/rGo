@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zrcoder/rGo/util"
 	"github.com/zrcoder/rGo/util/ssh"
 	"github.com/zrcoder/rGo/util/cmd"
 )
@@ -34,20 +33,20 @@ func main() {
 	for _, config := range configs {
 		go func() {
 			if config.User == "" {
-				config.User = util.Input.User
+				config.User = Input.User
 			}
 			if config.Password == "" && len(config.KeyFiles) == 0 {
-				config.Password = util.Input.Password
+				config.Password = Input.Password
 			}
-			cmds := util.Input.Cmds
+			cmds := Input.Cmds
 			headMsg := fmt.Sprintf("%s%s:", config, cmds)
-			if util.Input.Sh != "" {
-				shContent, err := ioutil.ReadFile(util.Input.Sh)
+			if Input.Sh != "" {
+				shContent, err := ioutil.ReadFile(Input.Sh)
 				if err != nil {
 					logger.Println(err)
 					os.Exit(1)
 				}
-				headMsg = fmt.Sprintf("%s%s:", config, util.Input.Sh)
+				headMsg = fmt.Sprintf("%s%s:", config, Input.Sh)
 				cmds = string(shContent)
 			}
 			if strings.ToLower(config.Host) == "localhost" || config.Host == "127.0.0.1" {
@@ -62,30 +61,29 @@ func main() {
 			}
 		}()
 	}
-	time.Sleep(time.Second * time.Duration(util.Input.Duration))
+	time.Sleep(time.Second * time.Duration(Input.Duration))
 }
 
 func localExec(headMsg, cmds string) {
-	result, err := cmd.Run(cmds)
-	if err != nil {
-		logger.Println(headMsg, err.Error())
-		return
-	}
-	logger.Printf("%s\n%s\n", headMsg, result)
+	stdout, stderr, err := cmd.Run(cmds)
+	printResult(headMsg, stdout, stderr, err)
 }
 
 func remoteExec(sshClient *ssh.Client, headMsg, cmds string) {
 	stdout, stderr, err := sshClient.Run(cmds)
-	defer sshClient.Close()
+	printResult(headMsg, stdout, stderr, err)
+	sshClient.Close()
+}
 
-	headMsg = strings.TrimRight(headMsg, lineSep) + lineSep
+func printResult(headMsg, stdout, stderr string, err error) {
+	result := strings.TrimRight(headMsg, lineSep) + lineSep
 	if stderr != "" {
-		headMsg += "stderr: " + stderr + lineSep
+		result += "stderr: " + stderr + lineSep
 	}
 	if err != nil {
-		headMsg += "error: " + err.Error() + lineSep
+		result += "error: " + err.Error() + lineSep
 	} else {
-		headMsg += strings.TrimRight(stdout, lineSep) + lineSep
+		result += strings.TrimRight(stdout, lineSep) + lineSep
 	}
-	logger.Println(headMsg)
+	logger.Println(result)
 }
