@@ -13,6 +13,7 @@ import (
 	"github.com/zrcoder/rGo/util/cmd"
 )
 
+
 const lineSep = "\n"
 
 var logger = log.New(os.Stdout, "", log.Lshortfile|log.LstdFlags)
@@ -68,7 +69,7 @@ func main() {
 }
 
 func localExec(headMsg, cmds string) {
-	stdout, stderr, err := cmd.Run(cmds)
+	stdout, stderr, err := cmd.BashRun(cmds)
 	printResult(headMsg, stdout, stderr, err)
 }
 
@@ -90,3 +91,4 @@ func printResult(headMsg, stdout, stderr string, err error) {
 	}
 	logger.Println(result)
 }
+
