@@ -4,25 +4,12 @@ import (
 	"bytes"
 	"errors"
 	"os/exec"
-	"runtime"
 	"time"
 )
 
-const (
-	OsWin    = "windows"
-	OsLinux  = "linux"
-	OsDarwin = "darwin"
-)
-
 // Executes the command and returns the result.
-func Run(command string) (string, string, error) {
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case OsWin:
-		cmd = exec.Command(command)
-	default:
-		cmd = exec.Command("/bin/bash", "-c", command)
-	}
+func Run(command string, arg ...string) (string, string, error) {
+	cmd := exec.Command(command, arg...)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
@@ -32,14 +19,8 @@ func Run(command string) (string, string, error) {
 }
 
 // Run a command, kill it if timeout
-func RunWithTimeout(timeout time.Duration, command string) (string, string, error) {
-	var cmd *exec.Cmd
-	switch runtime.GOOS {
-	case OsWin:
-		cmd = exec.Command(command)
-	default:
-		cmd = exec.Command("/bin/bash", "-c", command)
-	}
+func RunWithTimeout(timeout time.Duration, command string, arg ...string) (string, string, error) {
+	cmd := exec.Command(command, arg...)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
@@ -47,7 +28,7 @@ func RunWithTimeout(timeout time.Duration, command string) (string, string, erro
 
 	err := cmd.Start()
 	if err != nil {
-		return stdout.String(), stderr.String(), err
+		return "", "", err
 	}
 
 	done := make(chan error, 1)
@@ -61,6 +42,14 @@ func RunWithTimeout(timeout time.Duration, command string) (string, string, erro
 	case <-t:
 		cmd.Process.Kill()
 		err = errors.New("command timed out")
-		return stdout.String(), stderr.String(), err
+		return "", "", err
 	}
+}
+
+func BashRun(command string) (string, string, error) {
+	return Run("/bin/bash", "-c", command)
+}
+
+func BashRunWithTimeout(timeout time.Duration, command string) (string, string, error) {
+	return RunWithTimeout(timeout, "/bin/bash", "-c", command)
 }
